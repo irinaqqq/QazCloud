@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+/* Custom CSS */
+.form-group label {
+    font-weight: bold;
+}
+
+.form-control {
+    border-radius: 5px;
+    border-color: #ccc;
+}
+
+.account-form {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #888888;
+}
+
+.btn-dark {
+    background-color: #343a40;
+    color: #fff;
+    border-color: #343a40;
+}
+
+.btn-dark:hover {
+    background-color: #23272b;
+    border-color: #23272b;
+}
+
+table {
+    margin-top: 20px;
+}
+
+table td, table th {
+    vertical-align: middle !important;
+}
+
+table thead th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+table tbody tr td:first-child {
+    width: 70%;
+}
+
+.table i {
+    font-size: 1.5em;
+    color: #343a40;
+}
+.account-form {
+  height: 200px; /* change the height as desired */
+}
+
+</style>
+
+<div class="container">
+  <div class="container-fluid">
+    <div class="row no-gutter">
+      <div class="col-md-12 bg-light">
+        <div class="login d-flex align-items-center py-5">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-12  mx-auto">
+
+                <form class="account-form p-4 rounded" action="." method="post" enctype='multipart/form-data'>
+
+                  {% csrf_token %}
+
+                  <p class="h4 mb-4 font-weight-bold">Upload file</p>
+
+                  {% if form.errors %}
+                  <div class="alert alert-primary" role="alert">
+                    Error!
+                  </div>
+                  {% endif %}
+                  <button class="btn btn-dark btn-block py-2 mb-4 mt-5 font-weight-bold" type="submit"
+                  value="Log-in">Upload File</button>
+                  {{ form }}
+
+
+
+                  <p class="small font-weight-bold text-center pb-3">
+                 
+                  </p>
+
+                </form>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">File</th>
+      <th scope="col">Type</th>
+      <th scope="col">Uploaded</th>
+    </tr>
+  </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td><a href="{{ post.file_url }}">{{ post.file.name }}</a></td>
+                <td>
+                    {% if post.file.name|lower|slice:'-4:' == '.jpg' or post.file.name|lower|slice:'-4:' == '.jpeg' or post.file.name|lower|slice:'-4:' == '.png' %}
+                    <i class="fas fa-file-image"></i>
+                    {% elif post.file.name|lower|slice:'-4:' == '.mp4' or post.file.name|lower|slice:'-4:' == '.avi' or post.file.name|lower|slice:'-4:' == '.mov' or post.file.name|lower|slice:'-4:' == '.mkv'%}
+                    <i class="fas fa-file-video"></i>
+                    {% elif post.file.name|lower|slice:'-5:' == '.docx' or post.file.name|lower|slice:'-4:' == '.doc' %}
+                    <i class="fas fa-file-word"></i>
+                    {% elif post.file.name|lower|slice:'-5:' == '.xlsx' or post.file.name|lower|slice:'-4:' == '.xls' %}
+                    <i class="fas fa-file-excel"></i>
+                    {% elif post.file.name|lower|slice:'-5:' == '.pptx' or post.file.name|lower|slice:'-4:' == '.ppt' %}
+                    <i class="fas fa-file-powerpoint"></i>
+                    {% elif post.file.name|lower|slice:'-4:' == '.pdf' %}
+                    <i class="fas fa-file-pdf"></i>
+                    {% elif post.file.name|lower|slice:'-4:' == '.zip' or post.file.name|lower|slice:'-4:' == '.rar' %}
+                    <i class="fas fa-file-archive"></i>
+                    {% else %}
+                    <i class="fas fa-file"></i>
+                    {% endif %}
+                </td>
+                <td>{{ post.publish }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No files uploaded yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
